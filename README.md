@@ -13,3 +13,17 @@
      - traefik.http.routers.something-need-auth.middlewares=fw-auth
      - traefik.http.middlewares.fw-auth.forwardauth.address=http://<Address of Forward Wall>/<Passcode>
    ```
+
+## Hint
+
+当 App 需要进行 `fetch` 请求时，请注意发送 Cookie。
+
+也可以为 API 端点设置排除：
+
+```yaml
+labels:
+  - traefik.http.routers.example-app.rule=Host(`example.com`)
+  - traefik.http.routers.example-app-bypass.rule=Host(`example.com`) && (PathPrefix(`/api`) || Path(`/manifest.webmanifest`))
+  - traefik.http.routers.example-app.middlewares=fw-auth
+  - traefik.http.middlewares.fw-auth.forwardauth.address=http://<Address of Forward Wall>/<Passcode>
+```
